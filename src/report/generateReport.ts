@@ -1,5 +1,5 @@
 import { TerrascanScanReport, Violation } from './terrascanReportData';
-import { lstatSync, writeFileSync } from 'fs';
+import { writeFileSync } from 'fs';
 import { Utils } from '../utils/utils';
 
 export class ReportGenerator {
@@ -100,7 +100,7 @@ export class ReportGenerator {
         <td>${violation.file}</td>
         <td>${violation.line}</td>
     </tr>`;
-                
+
                 violations += violationRow;
             }
 

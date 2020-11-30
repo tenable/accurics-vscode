@@ -1,65 +1,54 @@
-# accurics-iac README
+# Accurics for Visual Studio Code
 
-This is the README for your extension "accurics-iac". After writing up a brief description, we recommend including the following sections.
+Accurics detects and mitigates risks in Infrastructure as Code (IAC) and reduces your attack surface before infrastructure is provisioned.
 
-## Features
+This extension seamlessly enables scanning of your IAC files and folders through [Visual Studio Code](https://code.visualstudio.com/).
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+## Overview
 
-For example if there is an image subfolder under your extension project workspace:
+Accurics for Visual Studio Code extension supports Terraform, Kustomize, Helm & Kubernetes YAML. It uses Accurics CLI and Terrascan for scanning the IaC files and reports violations in the output window.
 
-\!\[feature X\]\(images/feature-x.png\)
+Accurics Extension operates has 2 modes
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+1. `Standalone`: Iac scans are performed locally within the VS Code environment. Results are displayed in the output window.
 
-## Requirements
+2. `Integrated`: Scan results are visible in [Accurics Cloud Console](https://app.accurics.com). The Accurics Console offers rich capabilities of viewing various KPIs, Policy Violations and Drifts. It also offers seamless integration with various Developer Tools like Jira and Slack.
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+## Installation
 
-## Extension Settings
+Launch Visual Studio Code and search for Accurics in the Extension Marketplace Workspace. Install the extension by selecting install option.
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+During the installation, Accurics Extension downloads other dependent components and configures them locally.
 
-For example:
+For Integrated mode, Follow the steps
 
-This extension contributes the following settings:
+- [ ] Create your free [Accurics account](https://app.accurics.com)
+- [ ] Login to the Accurics Console.
+- [ ] Create an environment and download config file for that Environment.
 
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+To remove the extension, select uninstall.
 
-## Known Issues
+## Usage
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+### Standalone Mode
 
-## Release Notes
+- Launch the extension and select Mode as Standalone.
+- Once the mode is selected, right-mouse-click on any IAC file
+- Select `Accurics Scan`. Select from the list of IaC types. Options available are  `Yaml`/`Helm`/`Kustomize`/`Terraform`.
+- Accurics extension performs the IaC scan and reports results in the output window of VS Code.
 
-Users appreciate release notes as you update your extension.
+### Integrated Mode
 
-### 1.0.0
+Launch the extension, select mode as Integrated and do the following steps
 
-Initial release of ...
+- Create an [Accurics account](https://app.accurics.com).
+- Login to the Accurics Console and create an Environment by following the steps in Environment creation wizard.
+- Select Environment name and Download the configuration file.
+- Place the configuration file in local folder for the extension.
+- Once the config file has ben downloaded, Run `Accurics Configure` command & select the downloaded file.
+- right-mouse-click on any IAC file within VS Code workspace.
+- Select `Accurics Scan`.
 
-### 1.0.1
+Extension will perform the scan and report the results in output window as well as in [Accurics Cloud Console](https://app.accurics.com)
 
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Currently, integrated scan is supported only for terraform file.

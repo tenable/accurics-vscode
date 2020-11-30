@@ -1,9 +1,13 @@
 import { ExtensionContext, window, workspace } from 'vscode';
 import { ACCURICS_IAC_MODE, INTEGRATED_MODE, WORKSPACE_CONFIG_FILE_KEY } from '../constants';
-import {lstatSync} from 'fs';
-import {sep} from 'path';
+import { lstatSync, existsSync } from 'fs';
+import { sep } from 'path';
+import { platform } from 'os';
+import { LogUtils } from './accuricsExtLogger';
 
 export class Utils {
+
+    private static logger: LogUtils;
 
     static isIntegratedMode(context: ExtensionContext): boolean {
         let mode: string | undefined = context.globalState.get(ACCURICS_IAC_MODE);
@@ -23,7 +27,7 @@ export class Utils {
 
     //Show a message to user if user escapes scan options
     static showScanAbortedMessage() {
-        window.showInformationMessage('AccuricsIAC: Scan aborted');
+        window.showInformationMessage('Scan aborted');
     }
 
     static getWorkspaceLocation(): string | undefined {
@@ -33,7 +37,7 @@ export class Utils {
             return undefined;
         }
 
-        workspaceLocation = workspaceFolders[0].uri.toString().replace('file://', '');
+        workspaceLocation = workspaceFolders[0].uri.fsPath;
         return workspaceLocation;
     }
 
@@ -48,5 +52,37 @@ export class Utils {
         }
 
         return filePath;
+    }
+
+    static isWindowsPlatform(): boolean {
+        return platform().includes('win32');
+    }
+
+    static isDarwinPlatform(): boolean {
+        return platform().includes('darwin');
+    }
+
+    static isTerrascanBinaryPresent(context: ExtensionContext): boolean {
+        let terrascanLocation: string = context.extensionUri.fsPath + sep + 'executables' + sep + 'terrascan' + sep + 'terrascan';
+        if (this.isWindowsPlatform()) {
+            terrascanLocation += '.exe';
+        }
+        return existsSync(terrascanLocation);
+    }
+
+    static isAccuricsCliBinaryPresent(context: ExtensionContext): boolean {
+        let accuricsCliLocation: string = context.extensionUri.fsPath + sep + 'executables' + sep + 'accurics' + sep + 'accurics';
+        if (this.isWindowsPlatform()) {
+            accuricsCliLocation += '.exe';
+        }
+        return existsSync(accuricsCliLocation);
+    }
+
+    static setLoggerObject(logUtils: LogUtils) {
+        this.logger = logUtils;
+    }
+
+    static logMessage(message: string) {
+        this.logger.log(message);
     }
 }

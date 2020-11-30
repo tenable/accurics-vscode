@@ -4,15 +4,15 @@ import { WORKSPACE_CONFIG_FILE_KEY, CONFIGURATION_OVERRIDE_OPTIONS, CONFIGURATIO
 
 export async function configureCommand(context: ExtensionContext) {
 
-    /*
-    *	Configure command will applicable only when mode is 'integrated'.
-    *	In the 'integrated' mode, workspace is scanned using accurics-cli.
-    *	Command will abort if no workspace is open
-    */
-
-    let workspaceFolders = workspace.workspaceFolders;
+    /**
+     *  Configure command will applicable only when mode is 'integrated'.
+     *	In the 'integrated' mode, workspace is scanned using accurics-cli.
+     *	Command will abort if no workspace is open
+     */
+    
+     let workspaceFolders = workspace.workspaceFolders;
     if (workspaceFolders === undefined || workspaceFolders.length === 0) {
-        window.showErrorMessage('AccuricsIAC: No Workspace open to configure');
+        window.showErrorMessage('No Workspace open to configure');
         return;
     }
 
@@ -22,13 +22,13 @@ export async function configureCommand(context: ExtensionContext) {
             if (userInput === 'Yes') {
                 chooseConfigFileFunction(context);
             } else {
-                window.showInformationMessage('AccuricsIAC: Using old configuration');
+                window.showInformationMessage('Using old configuration');
             }
         } else {
             chooseConfigFileFunction(context);
         }
     } else {
-        window.showErrorMessage('AccuricsIAC: Use "Integrated" mode');
+        window.showErrorMessage('Use "Integrated" mode');
     }
 }
 
@@ -44,14 +44,14 @@ async function chooseConfigFileFunction(context: ExtensionContext) {
 
     if (configFile === undefined) {
         if (Utils.validateWorkspaceState(context)) {
-            window.showInformationMessage('AccuricsIAC: Using old configuration');
+            window.showInformationMessage('Using old configuration');
             return;
         }
-        window.showErrorMessage('Config file not selected. AccuricsIAC configuration incomplete.');
+        window.showErrorMessage('Config file not selected. Accurics configuration incomplete.');
         return;
     }
 
-    let configFilePath: string = configFile[0].path;
+    let configFilePath: string = configFile[0].fsPath;
     context.workspaceState.update(WORKSPACE_CONFIG_FILE_KEY, configFilePath);
     console.log(configFilePath);
 

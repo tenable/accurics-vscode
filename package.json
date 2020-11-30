@@ -1,10 +1,12 @@
 {
 	"name": "accurics-iac",
-	"displayName": "AccuricsIAC",
-	"description": "Find IaC policy breaches with AccuricsIAC",
-	"version": "0.0.1",
+	"displayName": "Accurics",
+	"description": "Detects and mitigates risks in Infrastructure as Code and reduces your attack surface before infrastructure is provisioned.",
+	"version": "1.0.0",
+	"icon": "resources/accurics.png",
+	"publisher": "AccuricsInc",
 	"engines": {
-		"vscode": "^1.51.0"
+		"vscode": "^1.49.0"
 	},
 	"categories": [
 		"Other"
@@ -17,15 +19,29 @@
 		"commands": [
 			{
 				"command": "accurics-iac.configure",
-				"title": "AccuricsIAC Configuration"
+				"title": "Accurics Configuration"
 			},
 			{
 				"command": "accurics-iac.scan",
-				"title": "AccuricsIAC Scan"
+				"title": "Accurics Scan"
 			},
 			{
 				"command": "accurics-iac.mode",
-				"title": "AccuricsIAC Mode"
+				"title": "Accurics Mode"
+			}
+		],
+		"keybindings":[
+			{
+				"command": "accurics-iac.configure",
+				"key": "ctrl+shift+c"
+			},
+			{
+				"command": "accurics-iac.scan",
+				"key": "ctrl+shift+s"
+			},
+			{
+				"command": "accurics-iac.mode",
+				"key": "ctrl+shift+m"
 			}
 		],
 		"menus": {
@@ -45,11 +61,17 @@
 		"pretest": "npm run compile && npm run lint",
 		"test": "node ./out/test/runTest.js"
 	},
+	"dependencies": {
+		"strip-ansi": "^6.0.0",
+		"typed-rest-client": "^1.8.0",
+		"decompress": "^4.2.1"
+	},
 	"devDependencies": {
+		"@types/decompress": "^4.2.3",
 		"@types/glob": "^7.1.3",
 		"@types/mocha": "^8.0.0",
 		"@types/node": "^12.11.7",
-		"@types/vscode": "^1.51.0",
+		"@types/vscode": "^1.49.0",
 		"@typescript-eslint/eslint-plugin": "^4.1.1",
 		"@typescript-eslint/parser": "^4.1.1",
 		"eslint": "^7.9.0",

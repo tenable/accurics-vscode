@@ -16,9 +16,22 @@ export const ACCRUICS_CLI_SCAN_QUICK_PICK_PLACEHOLDER: string = 'Scan options?';
 
 //extension mode constants
 export const MODE_QUICK_PICK_OPTIONS: string[] = [STANDALONE_MODE, INTEGRATED_MODE];
-export const MODE_QUICK_PICK_PLACE_HOLDER: string = 'Choose mode for AccuricsIAC Scans';
+export const MODE_QUICK_PICK_PLACE_HOLDER: string = 'Choose mode for Accurics Scan';
 
 //configure command constants
 export const CONFIGURATION_OVERRIDE_OPTIONS: string[] = ['Yes', 'No'];
 export const CONFIGURATION_QUICK_PICK_PLACE_HOLDER: string = 'Override existing configuration?';
 export const CONFIGURATION_OPEN_DIALOG_LABEL: string = 'Select config file downloaded from accurics cloud';
+
+//download progress and error related constants
+export const ACCURICS_TOOLS_DOWNLOAD_SUCCESS = 'Downloaded Accurics tools';
+export const ACCURICS_TOOLS_DOWNLOAD_FAILURE = 'Accurics tools download failed. ';
+export const ACCURICS_TOOLS_NOT_INSTALLED = 'Accurics tools not installed';
+export const INSTALL_OPTION = "Install";
+export const PROGRESS_MESSAGE = 'Downloading Accurics tools';
+
+//interface to define the type for vscode progress notification
+export interface ProgressType {
+    message?: string | undefined;
+    increment?: number | undefined;
+};
