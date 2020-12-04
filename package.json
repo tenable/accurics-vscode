@@ -2,7 +2,7 @@
 	"name": "accurics-iac",
 	"displayName": "Accurics",
 	"description": "Detects and mitigates risks in Infrastructure as Code and reduces your attack surface before infrastructure is provisioned.",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"icon": "resources/accurics.png",
 	"publisher": "AccuricsInc",
 	"engines": {
@@ -30,7 +30,7 @@
 				"title": "Accurics Mode"
 			}
 		],
-		"keybindings":[
+		"keybindings": [
 			{
 				"command": "accurics-iac.configure",
 				"key": "ctrl+shift+c"
@@ -46,6 +46,12 @@
 		],
 		"menus": {
 			"explorer/context": [
+				{
+					"when": "resourceLangId == terraform || resourceLangId == yaml || explorerResourceIsFolder",
+					"command": "accurics-iac.scan"
+				}
+			],
+			"editor/context": [
 				{
 					"when": "resourceLangId == terraform || resourceLangId == yaml || explorerResourceIsFolder",
 					"command": "accurics-iac.scan"

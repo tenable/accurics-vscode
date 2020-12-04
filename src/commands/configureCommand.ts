@@ -22,7 +22,7 @@ export async function configureCommand(context: ExtensionContext) {
             if (userInput === 'Yes') {
                 chooseConfigFileFunction(context);
             } else {
-                window.showInformationMessage('Using old configuration');
+                window.showInformationMessage('Using existing configuration');
             }
         } else {
             chooseConfigFileFunction(context);
@@ -44,7 +44,7 @@ async function chooseConfigFileFunction(context: ExtensionContext) {
 
     if (configFile === undefined) {
         if (Utils.validateWorkspaceState(context)) {
-            window.showInformationMessage('Using old configuration');
+            window.showInformationMessage('Using existing configuration');
             return;
         }
         window.showErrorMessage('Config file not selected. Accurics configuration incomplete.');

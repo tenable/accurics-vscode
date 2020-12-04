@@ -33,7 +33,7 @@ export async function scanCommand(context: ExtensionContext, uri: Uri) {
 
 		let userInput = await window.showQuickPick(TERRASCAN_IAC_TYPES, { placeHolder: IAC_TYPE_QUICK_PICK_PLACEHOLDER });
 		if (userInput !== undefined) {
-			window.showInformationMessage('Started Scanning');
+			window.showInformationMessage('Scanning in progress');
 			standaloneScan(context, workspaceLocation, userInput, isRunFromCommandPalette, uri);
 		} else {
 			Utils.showScanAbortedMessage();
@@ -47,7 +47,7 @@ export async function scanCommand(context: ExtensionContext, uri: Uri) {
 		//scan mode is integrated mode, use accurics-cli
 		let userInput = await window.showQuickPick(ACCURICS_CLI_SCAN_OPTIONS, { placeHolder: ACCRUICS_CLI_SCAN_QUICK_PICK_PLACEHOLDER });
 		if (userInput !== undefined) {
-			window.showInformationMessage('Started Scanning');
+			window.showInformationMessage('Scanning in progress');
 			integratedScan(context, workspaceLocation, userInput, uri, isRunFromCommandPalette);
 		} else {
 			Utils.showScanAbortedMessage();

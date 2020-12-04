@@ -14,7 +14,9 @@ export async function activate(context: vscode.ExtensionContext) {
     Utils.setLoggerObject(new LogUtils(context));
     Utils.logMessage('accurics-iac activated!');
 
-    downloadTools(context);
+    if (!Utils.isTerrascanBinaryPresent(context) && !Utils.isAccuricsCliBinaryPresent(context)) {
+        downloadTools(context);
+    }
 
     //This command would be used for configuration of the integrated mode
     let configureCommand: vscode.Disposable = vscode.commands.registerCommand('accurics-iac.configure', async () => accuricsIACConfigure(context));
@@ -40,26 +42,24 @@ export function deactivate() { }
 
 function downloadTools(context: vscode.ExtensionContext) {
 
-    if (!Utils.isTerrascanBinaryPresent(context) && !Utils.isAccuricsCliBinaryPresent(context)) {
-        let progressOptions: vscode.ProgressOptions = {
-            location: vscode.ProgressLocation.Notification,
-            title: PROGRESS_MESSAGE,
-            cancellable: false
-        };
+    let progressOptions: vscode.ProgressOptions = {
+        location: vscode.ProgressLocation.Notification,
+        title: PROGRESS_MESSAGE,
+        cancellable: false
+    };
 
-        return vscode.window.withProgress(progressOptions, async (progress) => {
+    return vscode.window.withProgress(progressOptions, async (progress) => {
 
-            progress.report({ increment: 10 });
-            let terrascanDownload = new TerrascanDownloader(context).downloadBinary(progress, true);
-            let accuricsCliDownload = new AccuricsCliDownloader(context).downloadBinary(progress, true);
+        progress.report({ increment: 10 });
+        let terrascanDownload = new TerrascanDownloader(context).downloadBinary(progress, true);
+        let accuricsCliDownload = new AccuricsCliDownloader(context).downloadBinary(progress, true);
 
-            return Promise.all([terrascanDownload, accuricsCliDownload])
-                .then(([isTerrascanDownloaded, isAccuricsCliDownloaded]) => {
-                    vscode.window.showInformationMessage(ACCURICS_TOOLS_DOWNLOAD_SUCCESS);
-                })
-                .catch((error) => {
-                    vscode.window.showErrorMessage(ACCURICS_TOOLS_DOWNLOAD_FAILURE + error);
-                });
-        });
-    }
+        return Promise.all([terrascanDownload, accuricsCliDownload])
+            .then(([isTerrascanDownloaded, isAccuricsCliDownloaded]) => {
+                vscode.window.showInformationMessage(ACCURICS_TOOLS_DOWNLOAD_SUCCESS);
+            })
+            .catch((error) => {
+                vscode.window.showErrorMessage(ACCURICS_TOOLS_DOWNLOAD_FAILURE + error);
+            });
+    });
 }
