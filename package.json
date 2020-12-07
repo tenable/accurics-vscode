@@ -2,7 +2,7 @@
 	"name": "accurics-iac",
 	"displayName": "Accurics",
 	"description": "Detects and mitigates risks in Infrastructure as Code and reduces your attack surface before infrastructure is provisioned.",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"icon": "resources/accurics.png",
 	"publisher": "AccuricsInc",
 	"engines": {

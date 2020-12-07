@@ -35,16 +35,22 @@ Launch the extension, select mode as Integrated and do the following steps
 
 - Create an [Accurics account](https://app.accurics.com).
 - Login to the Accurics Console and create an Environment by following the steps in Environment creation wizard.
-- Select Environment name and Download the configuration file.
+- Select Environment name and download the configuration file.
 - Place the configuration file in a local folder for the extension.
 - Once the config file has been downloaded, Run the `Accurics Configure` command & select the downloaded file.
 - right-mouse-click on any IAC file within VS Code workspace.
 - Select `Accurics Scan`.
+- Select desired option from the displayed scan commands.
+- Specify appropriate command options in the prompted input field, if no command options are provided then the command runs without any option.
+    - Commands `init`, `plan`, and `workspace` take parameters equivalent to [Terraform CLI](https://www.terraform.io/docs/commands/index.html)
+    - Commands `tgplan`, `tgplanall`, and `plan-all` take parameters equivalent to [Terragrunt CLI](https://terragrunt.gruntwork.io/docs/reference/cli-options/)
+    - Command `plan cf` takes parameters equivalent to [CloudFormation CLI](https://docs.aws.amazon.com/cli/latest/reference/cloudformation/index.html)
+
 
 The extension will perform the scan and report the results in output window as well as in [Accurics Cloud Console](https://app.accurics.com)
 
 Currently, integrated scan is supported only for terraform file.
 
-## Uninstall
+## Uninstallation
 
 To remove the extension, bring up the Extensions view by clicking on the Extensions icon in the Activity Bar, select Accurics and click on Uninstall.
