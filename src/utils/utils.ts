@@ -4,6 +4,7 @@ import { lstatSync, existsSync } from 'fs';
 import { sep } from 'path';
 import { platform } from 'os';
 import { LogUtils } from './accuricsExtLogger';
+import {ACCURICS_INIT_COMMAND, ACCURICS_WORKSPACE_COMMAND} from '../constants';
 
 export class Utils {
 
@@ -84,5 +85,9 @@ export class Utils {
 
     static logMessage(message: string) {
         this.logger.log(message);
+    }
+
+    static nonAccuricsPlanCommands(command: string): boolean {
+        return command === ACCURICS_INIT_COMMAND || command === ACCURICS_WORKSPACE_COMMAND;
     }
 }

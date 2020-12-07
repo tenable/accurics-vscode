@@ -1,8 +1,8 @@
 import { exec, ExecException, ExecOptions } from 'child_process';
 import { lstatSync } from 'fs';
-import { ExtensionContext, OutputChannel, Uri, window, workspace } from 'vscode';
+import { ExtensionContext, InputBoxOptions, OutputChannel, Uri, window, workspace } from 'vscode';
 import { Utils } from '../utils/utils';
-import { ACCRUICS_CLI_SCAN_QUICK_PICK_PLACEHOLDER, TERRASCAN_IAC_TYPES, ACCURICS_CLI_SCAN_OPTIONS, IAC_TYPE_QUICK_PICK_PLACEHOLDER, WORKSPACE_CONFIG_FILE_KEY, ACCURICS_TOOLS_NOT_INSTALLED, ACCURICS_TOOLS_DOWNLOAD_SUCCESS, ACCURICS_TOOLS_DOWNLOAD_FAILURE, INSTALL_OPTION } from '../constants';
+import { ACCRUICS_CLI_SCAN_QUICK_PICK_PLACEHOLDER, TERRASCAN_IAC_TYPES, ACCURICS_CLI_SCAN_OPTIONS, IAC_TYPE_QUICK_PICK_PLACEHOLDER, WORKSPACE_CONFIG_FILE_KEY, ACCURICS_TOOLS_NOT_INSTALLED, ACCURICS_TOOLS_DOWNLOAD_SUCCESS, ACCURICS_TOOLS_DOWNLOAD_FAILURE, INSTALL_OPTION, ACCURICS_WORKSPACE_COMMAND } from '../constants';
 import { TerrascanScanReport } from '../report/terrascanReportData';
 import { ReportGenerator } from '../report/generateReport';
 import { sep } from 'path';
@@ -47,15 +47,30 @@ export async function scanCommand(context: ExtensionContext, uri: Uri) {
 		//scan mode is integrated mode, use accurics-cli
 		let userInput = await window.showQuickPick(ACCURICS_CLI_SCAN_OPTIONS, { placeHolder: ACCRUICS_CLI_SCAN_QUICK_PICK_PLACEHOLDER });
 		if (userInput !== undefined) {
-			window.showInformationMessage('Scanning in progress');
-			integratedScan(context, workspaceLocation, userInput, uri, isRunFromCommandPalette);
+
+			let inputBoxOptions: InputBoxOptions = {
+				prompt: `Enter ${userInput} options`
+			};
+
+			let userScanFlags = await window.showInputBox(inputBoxOptions);
+
+			if (Utils.nonAccuricsPlanCommands(userInput)) {
+				if (userScanFlags === undefined) {
+					window.showInformationMessage(`Running "${userInput}"`);
+				} else {
+					window.showInformationMessage(`Running "${userInput} ${userScanFlags}"`);
+				}
+			} else {
+				window.showInformationMessage('Scanning in progress');
+			}
+			integratedScan(context, workspaceLocation, userInput, uri, isRunFromCommandPalette, userScanFlags);
 		} else {
 			Utils.showScanAbortedMessage();
 		}
 	}
 }
 
-async function integratedScan(context: ExtensionContext, workspaceLocation: string, userInput: string, source: Uri, isRunFromCommandPalette: boolean) {
+async function integratedScan(context: ExtensionContext, workspaceLocation: string, userInput: string, source: Uri, isRunFromCommandPalette: boolean, commandOptions?: string) {
 	Utils.logMessage('Integrated scan started.');
 	if (!Utils.isAccuricsCliBinaryPresent(context)) {
 		let userAction = await window.showInformationMessage(ACCURICS_TOOLS_NOT_INSTALLED, INSTALL_OPTION);
@@ -94,8 +109,17 @@ async function integratedScan(context: ExtensionContext, workspaceLocation: stri
 		accuricsCliLocation += '.exe';
 	}
 
-	Utils.logMessage(`accurics ${userInput} -config= ` + context.workspaceState.get(WORKSPACE_CONFIG_FILE_KEY));
-	exec(`${accuricsCliLocation} ${userInput} -config=` + context.workspaceState.get(WORKSPACE_CONFIG_FILE_KEY),
+	let commandToExecute: string = `${accuricsCliLocation} ${userInput}`;
+	if (!Utils.nonAccuricsPlanCommands(userInput)) {
+		commandToExecute += ` -config=` + context.workspaceState.get(WORKSPACE_CONFIG_FILE_KEY);
+	}
+
+	if (commandOptions !== undefined) {
+		commandToExecute += ` ${commandOptions}`;
+	}
+
+	Utils.logMessage(commandToExecute.replace(accuricsCliLocation, "accurics"));
+	exec(commandToExecute,
 		execOptions,
 		(err: ExecException | null, stdout: any, stderr: any) => {
 
@@ -118,7 +142,7 @@ async function integratedScan(context: ExtensionContext, workspaceLocation: stri
 				accuricsOutputChannel.appendLine(stripAnsi(stdout));
 
 				// print report to output.
-				if (userInput === 'plan') {
+				if (!Utils.nonAccuricsPlanCommands(userInput)) {
 					Utils.logMessage('Print json report to output channel.');
 					let displayJsonReportCommand: string = 'cat accurics_report.json';
 					if (Utils.isWindowsPlatform()) {
@@ -131,9 +155,6 @@ async function integratedScan(context: ExtensionContext, workspaceLocation: stri
 								accuricsOutputChannel.appendLine(stderr);
 							}
 						});
-				} else {
-					accuricsOutputChannel.appendLine(stripAnsi(stderr));
-					accuricsOutputChannel.appendLine(stripAnsi(stdout));
 				}
 			}
 		});
@@ -178,7 +199,7 @@ async function standaloneScan(context: ExtensionContext, workspaceLocation: stri
 		terrascanLocation += '.exe';
 	}
 
-	Utils.logMessage(`${terrascanLocation} scan -i ${userInput} ${scanOptions}`);
+	Utils.logMessage(`terrascan scan -i ${userInput} ${scanOptions}`);
 	exec(`${terrascanLocation} scan -i ${userInput} ${scanOptions}`,
 		execOptions,
 		(err: ExecException | null, stdout: any, stderr: any) => {

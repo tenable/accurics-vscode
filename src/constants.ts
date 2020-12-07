@@ -11,7 +11,14 @@ export const TERRASCAN_IAC_TYPES: string[] = ['helm', 'k8s', 'kustomize', 'terra
 export const IAC_TYPE_QUICK_PICK_PLACEHOLDER: string = 'Pick iac type';
 
 //accurics-cli scan option constants
-export const ACCURICS_CLI_SCAN_OPTIONS: string[] = ['init', 'plan'];
+export const ACCURICS_INIT_COMMAND = 'init';
+export const ACCURICS_PLAN_COMMAND = 'plan';
+export const ACCURICS_PLAN_ALL_COMMAND = 'plan-all';
+export const ACCURICS_PLAN_CF_COMMAND = 'plan cf';
+export const ACCURICS_TG_PLAN_COMMAND = 'tgplan';
+export const ACCURICS_TG_PLAN_ALL_COMMAND = 'tgplanall';
+export const ACCURICS_WORKSPACE_COMMAND = 'workspace';
+export const ACCURICS_CLI_SCAN_OPTIONS: string[] = [ACCURICS_INIT_COMMAND, ACCURICS_PLAN_COMMAND, ACCURICS_PLAN_ALL_COMMAND, ACCURICS_PLAN_CF_COMMAND, ACCURICS_TG_PLAN_COMMAND, ACCURICS_TG_PLAN_ALL_COMMAND, ACCURICS_WORKSPACE_COMMAND];
 export const ACCRUICS_CLI_SCAN_QUICK_PICK_PLACEHOLDER: string = 'Scan options?';
 
 //extension mode constants
